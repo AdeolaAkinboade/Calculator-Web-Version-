@@ -1,0 +1,112 @@
+<html>
+<head>
+<!--link rel="stylesheet" type="text/css" href="style.css" means I am linking to another sheet -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <div class="header">
+    <h1> Calculator App </h1>
+      </div>
+</head>
+<body>
+
+    
+<!--td means "table data" or "part of a table", tr means table ROW--> <!--class added because we have to divide styling in CSS-->
+    <table border="2">
+        <tr>
+            <td colspan="4">
+                <!--this instead of input = text to allow for two rows for equation and output to be displayed in one go-->
+                <textarea id="inputBox" readonly rows="2"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="digitbutton" onclick="digitspressed(7)">7</td>
+            <td class="digitbutton" onclick="digitspressed(8)">8</td>
+            <td class="digitbutton" onclick="digitspressed(9)">9</td>
+            <td class="operator" onclick="operatorButton('x')">x</td>
+        </tr>
+        <tr>
+            <td class="digitbutton" onclick="digitspressed(4)">4</td>
+            <td class="digitbutton" onclick="digitspressed(5)">5</td>
+            <td class="digitbutton" onclick="digitspressed(6)">6</td>
+            <td class="operator" onclick="operatorButton('-')">-</td>
+        </tr>
+        <tr>
+            <td class="digitbutton" onclick="digitspressed(1)">1</td>
+            <td class="digitbutton" onclick="digitspressed(2)">2</td>
+            <td class="digitbutton" onclick="digitspressed(3)">3</td>
+            <td class="operator" onclick="operatorButton('+')">+</td>
+        </tr>
+        <tr>
+        <!--decimal needs to use the digitspressed function in order to work with decimals-->
+            <td class="operator" onclick="digitspressed('.')">.</td>
+            <td class="digitbutton" onclick="digitspressed(0)">0</td>
+            <td class="EscapeButton" onclick="buttonAC()">AC</td>
+            <td class="operator" onclick="operatorButton('/')">/</td>
+        </tr>
+        <tr>
+            <td class="operator" colspan="4" onclick="equalbutton()">=</td>
+        </tr>
+    </table>
+
+    <script>
+        //beginning of use of Javascript :)
+        var newline = true;
+        var value1;
+        var currentoperator;
+
+        function digitspressed(button) {
+            var currentValue = document.getElementById('inputBox').value;
+            //trying to handle the decimals being handled in the code//
+            if (button === '.' && currentValue.includes('.')) {
+                return;
+            }
+
+            if (newline == true) {
+                document.getElementById('inputBox').value = button;
+                newline = false;
+            } else {
+                document.getElementById('inputBox').value = currentValue + button;
+            }
+        }
+
+        //needs to not have space like " " cause it can cause errors with decimals//
+        function buttonAC() {
+            document.getElementById('inputBox').value = "";
+            newline = true;
+        }
+
+        function operatorButton(operator) {
+            currentoperator = operator;
+            value1 = parseFloat(document.getElementById('inputBox').value);
+            newline = true;
+        }
+
+        function equalbutton() {
+            //parsefloat not parseint to handle our decimals//
+            var value2 = parseFloat(document.getElementById('inputBox').value);
+            var finalproduct;
+            //i added this because I wanted to see the full equation and output//
+            var value3 = value1 + " " + currentoperator + " " + value2;
+
+            switch (currentoperator) {
+                case "+":
+                    finalproduct = value1 + value2;
+                    break;
+                case "-":
+                    finalproduct = value1 - value2;
+                    break;
+                case "/":
+                    finalproduct = value1 / value2;
+                    break;
+                case "x":
+                    finalproduct = value1 * value2;
+                    break;
+            }
+            //add this with "\n" to see the full equation and output on two lines//
+            document.getElementById('inputBox').value = value3 + "\n" + finalproduct;
+
+            value1 = 0;
+            newline = true;//this means make a newline//
+        }
+    </script>
+</body>
+</html>
